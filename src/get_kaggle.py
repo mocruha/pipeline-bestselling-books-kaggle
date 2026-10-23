@@ -8,7 +8,7 @@ path = kagglehub.dataset_download(
 
 print("Path to dataset files:", path)
 
-project_root = Path(__file__).resolve().parent.parent
+project_root = Path(__file__).resolve().parents[1]
 target_dir = project_root / "data" / "raw"
 target_dir.mkdir(parents=True, exist_ok=True)
 
