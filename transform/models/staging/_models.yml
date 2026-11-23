@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: stg_bronze__bestselling_books
+    description: >
+      Bronze tipado e conformado: 1 linha por posição de ranking
+      (grão `(list_date, country, rank)`). Campos multivalorados são reduzidos
+      ao primeiro token, com flags de auditoria e valores raw preservados.
+    columns:
+      - name: list_date
+        description: "Primeiro dia do mês da lista."
+        data_tests: [not_null]
+      - name: country
+        data_tests: [not_null]
+      - name: rank
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      - name: title
+        data_tests: [not_null]
+      - name: primary_author
+        description: "Primeiro autor do livro (campo `author` pode conter vários)."
+        data_tests: [not_null]
+      - name: gender
+        description: "Gênero do primeiro autor: m, w, n ou unknown."
+        data_tests: [not_null]
+      - name: _dlt_id
+        description: "Chave técnica gerada pelo dlt."
+        data_tests: [unique, not_null]

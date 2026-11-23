@@ -1,5 +1,10 @@
+GUIA-SILVER.md
 .python-version
 .venv/
 data/
-transformations/target/
-transformations/dbt_packages/
+scripts/
+skills/
+transform/dev.duckdb
+transform/logs/
+transform/plans/
+.hermes/

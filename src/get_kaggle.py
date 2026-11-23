@@ -1,5 +1,6 @@
-from pathlib import Path
 import shutil
+from pathlib import Path
+
 import kagglehub
 
 # Download latest version
@@ -16,4 +17,3 @@ for file_path in Path(path).iterdir():
     if file_path.is_file():
         shutil.copy(file_path, target_dir / file_path.name)
         print(f"Copied {file_path.name} to {target_dir}")
-

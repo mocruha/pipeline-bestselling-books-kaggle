@@ -1,4 +1,5 @@
 from pathlib import Path
+
 import dlt
 from dlt.sources.filesystem import filesystem, read_csv
 
@@ -6,6 +7,8 @@ ROOT = Path(__file__).parents[1]
 
 data_file = ROOT / "data" / "raw"
 db_path = ROOT / "data" / "bronze" / "bestselling_books.duckdb"
+
+db_path.parent.mkdir(parents=True, exist_ok=True)
 
 files = filesystem(
     bucket_url=str(data_file),
