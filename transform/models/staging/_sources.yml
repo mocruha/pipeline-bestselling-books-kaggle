@@ -1,0 +1,31 @@
+version: 2
+
+# Bronze anexado no profile como `bronze` (read_only); dlt escreveu no schema
+# `bronze` (dataset_name), então o path real é `bronze.bronze.b_bestselling_books`.
+#
+# Nota: dbt-duckdb colapsa database/schema quando `schema` == target.schema
+# (`main`) e o path vira `bronze.main.*`, que não existe. Manter `schema: bronze`.
+# Para consultar fora do dbt, anexe o bronze no CLI, senão o view não resolve:
+#   duckdb dev.duckdb -c "ATTACH '../data/bronze/bestselling_books.duckdb' AS bronze (READ_ONLY)"
+sources:
+  - name: bronze
+    description: "Camada bronze gerada por src/ingestion_duckdb.py (dlt)"
+    database: bronze
+    schema: bronze
+
+    tables:
+      - name: b_bestselling_books
+        description: "Rankings mensais de bestsellers por país (Kaggle)"
+        columns:
+          - name: date
+            data_tests: [not_null]
+          - name: country
+            data_tests: [not_null]
+          - name: rank
+            data_tests: [not_null]
+          - name: title
+            data_tests: [not_null]
+          - name: author
+            data_tests: [not_null]
+          - name: _dlt_id
+            data_tests: [unique, not_null]

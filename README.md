@@ -27,11 +27,18 @@ Verificação: `./scripts/check_duckdb_versions.sh` deve imprimir `OK: majors al
 
     uv sync
     uv run python src/ingestion_duckdb.py     # bronze: data/bronze/bestselling_books.duckdb
-    cd transform && uv run dbt run            # dev.duckdb
+    cd transform && uv run dbt build          # silver: dev.duckdb (schema silver)
+
+## Arquitetura
+
+Medalhão: **bronze** (dlt, cru) → **silver** (dbt, tipado 1:1) → **gold** (star
+schema, próxima etapa). A convenção do dbt está em `transform/README.md`.
 
 ## Consultas
 
     duckdb data/bronze/bestselling_books.duckdb \
       "select count(*) from bronze.b_bestselling_books"
 
-    duckdb transform/dev.duckdb "select schema_name, table_name from duckdb_tables()"
+    duckdb transform/dev.duckdb \
+      -c "ATTACH '../data/bronze/bestselling_books.duckdb' AS bronze (READ_ONLY);
+          select * from silver.stg_bronze__bestselling_books limit 10"
